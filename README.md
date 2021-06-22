@@ -1,6 +1,15 @@
-This is a demo android appliaction which is developed on MVVM Architectural design pattern by using Kotlin programming language.
+This is a demo android application which is developed on MVVM Architectural design pattern by using Kotlin programming language.
 
 By referring this application code we can understand most of the latest android application development concepts like
+
+- ViewModel
+- DataBinding
+- LiveData
+- Hilt (for dependency injection)
+- Kotlin Coroutines
+- Retrofit
+- Room
+- Workmanager
 
 **MVVM**
  - It is an architectural design pattern, where presentation, business and data layers are loosely coupled.
@@ -26,6 +35,14 @@ By referring this application code we can understand most of the latest android 
 - REST-Client based web services implementation with Retrofit library.
 - It's simple to use and removes a lot of effort for making REST based API calls.
 - API calls are asynchronous and it will be taken care of by the library itself.
+
+**Room**
+- For local data storage - its a just an abstraction on top of sqlite DB
+
+**Workmanager**
+- WorkManager is an API that makes it easy to schedule reliable, asynchronous tasks 
+  that are expected to run even if the app in background, exits or the device restarts.
+
 
    
 

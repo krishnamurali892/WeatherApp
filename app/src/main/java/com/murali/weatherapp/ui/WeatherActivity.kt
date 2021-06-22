@@ -16,8 +16,7 @@ import androidx.lifecycle.Observer
 import com.google.android.gms.location.*
 import com.murali.weatherapp.R
 import com.murali.weatherapp.databinding.ActivityWeatherInfoBinding
-import com.murali.weatherapp.model.ServerResponse
-import com.murali.weatherapp.model.weather.WeatherResponse
+import com.murali.weatherapp.utils.Resource
 import com.murali.weatherapp.utils.*
 import com.murali.weatherapp.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,21 +86,21 @@ class WeatherActivity : AppCompatActivity() {
         weatherViewModel.liveData.observe(this, Observer {
             it?.let { resource ->
                 when (resource.status) {
-                    ServerResponse.Status.SUCCESS -> {
+                    Resource.Status.SUCCESS -> {
                         tvWeatherInfo.visibility = View.VISIBLE
                         progressBar.visibility = View.GONE
                         resource.data?.let {
-                            if (it is WeatherResponse) {
-                                tvWeatherInfo.setText(it.getWeatherData())
-                            }
+                            tvWeatherInfo.text = it.getWeatherData()
+                            EspressoIdlingResource.decrement()
                         }
                     }
-                    ServerResponse.Status.ERROR -> {
+                    Resource.Status.ERROR -> {
                         tvWeatherInfo.visibility = View.VISIBLE
                         progressBar.visibility = View.GONE
                         showToast(it.message)
                     }
-                    ServerResponse.Status.LOADING -> {
+                    Resource.Status.LOADING -> {
+                        EspressoIdlingResource.increment()
                         progressBar.visibility = View.VISIBLE
                         tvWeatherInfo.visibility = View.GONE
                     }
@@ -111,15 +110,14 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     private fun fetWeatherData(location: Location) {
-        if (NetworkUtils.isInternetAvailable(this)) {
-            weatherViewModel.getWeatherData(
-                location.latitude.toString(),
-                location.longitude.toString(),
-                Constants.APP_ID
-            )
-        } else {
+        if(!NetworkUtils.isInternetAvailable(this)){
             showToast(getString(R.string.check_internet_connection))
         }
+        weatherViewModel.getWeatherData(
+            location.latitude.toString(),
+            location.longitude.toString(),
+            Constants.APP_ID
+        )
     }
 
     override fun onRequestPermissionsResult(
